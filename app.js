@@ -1,3 +1,4 @@
+const path = require("path");
 /* add express server */
 const express = require("express");
 /* add enviroment variables */
@@ -34,7 +35,11 @@ app.set("view engine", ".hbs");
 //*Routes
 app.use("/", require("./routes/index"));
 
-/* test the server */
+//* Serve Static Files
+// public/ is where static files are served
+app.use(express.static(path.join(__dirname, "public")));
+
+/* Run the server */
 app.listen(
   PORT,
   console.log(`Server running on ${process.env.NODE_ENV} mode on port ${PORT}`)
