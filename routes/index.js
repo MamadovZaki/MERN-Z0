@@ -5,7 +5,9 @@ const router = express.Router();
 
 // todo: Login/Landing Page -- @route: GET/
 router.get("/", (request, response) => {
-  response.render("login");
+  response.render("login", {
+    layout: "login",
+  });
 });
 
 //todo: Dashboard -- @route: GET/

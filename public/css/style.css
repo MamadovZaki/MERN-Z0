@@ -2,3 +2,14 @@ body {
     background-color: rgba(0, 0, 0, 0.863);
     color: white;
 }
+
+p {
+    margin: 10px 0 !important;
+}
+
+.login-container {
+    width: 400px;
+    margin-top: 50px;
+    text-align: center;
+    color: black;
+}
