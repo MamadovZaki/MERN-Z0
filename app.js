@@ -8,9 +8,17 @@ const connectDB = require("./config/db");
 /* add HTTP logger middleware */
 const morgan = require("morgan");
 /* add express handlebars */
-var exphbs = require("express-handlebars");
+const exphbs = require("express-handlebars");
+/* add passport.js for authentication strategy */
+const passport = require("passport");
+/* add express sessions */
+const session = require("express-session");
 
-// Load config
+// ##### Configuration ######
+// !passport config
+dotenv.config("./config/passport")(passport);
+
+// !Load config
 dotenv.config({ path: "./config/config.env" });
 
 /* create an instance of express app */
@@ -24,8 +32,22 @@ if (process.env.NODE_ENV === "development") {
 /* use process.env to access dotenv file */
 const PORT = process.env.PORT || 5000;
 
-/* Connect to database */
+//* Connect to database */
 connectDB();
+
+//*express-sessions -- docs: https://www.npmjs.com/package/express-session
+//!make sure that sessions is always above passport
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+//*Passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
 
 //* Handlebars docs: https://www.npmjs.com/package/express-handlebars
 /* The string name of the file extension used by the templates. This value should correspond with the extname under which this view engine is registered with Express when calling app.engine(). */
