@@ -1,15 +1,24 @@
-/* Create express server */
+/* add express server */
 const express = require("express");
-/* Create enviroment variables */
+/* add enviroment variables */
 const dotenv = require("dotenv");
-/* Connect to database */
+/* add a database connection */
 const connectDB = require("./config/db");
+/* add HTTP logger middleware */
+const morgan = require("morgan");
+/* add express handlebars */
+var exphbs = require("express-handlebars");
 
 // Load config
 dotenv.config({ path: "./config/config.env" });
 
 /* create an instance of express app */
 const app = express();
+
+/* add morgan middleware only in development mode */
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 /* use process.env to access dotenv file */
 const PORT = process.env.PORT || 5000;
@@ -22,3 +31,8 @@ app.listen(
 
 /* Connect to database */
 connectDB();
+
+//* Handlebars docs: https://www.npmjs.com/package/express-handlebars
+/* The string name of the file extension used by the templates. This value should correspond with the extname under which this view engine is registered with Express when calling app.engine(). */
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.set("view engine", ".hbs");
