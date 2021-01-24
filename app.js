@@ -1,6 +1,8 @@
 const path = require("path");
 /* add express server */
 const express = require("express");
+/* add mongoose */
+const mongoose = require("mongoose");
 /* add enviroment variables */
 const dotenv = require("dotenv");
 /* add a database connection */
@@ -13,6 +15,9 @@ const exphbs = require("express-handlebars");
 const passport = require("passport");
 /* add express sessions */
 const session = require("express-session");
+/* add connect-mongo  */
+//!make sure it is below express-session
+const MongoStore = require("connect-mongo")(session);
 
 // ##### Configuration ######
 // !passport config
@@ -48,6 +53,7 @@ app.use(
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
 );
 
