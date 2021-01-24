@@ -16,10 +16,14 @@ const session = require("express-session");
 
 // ##### Configuration ######
 // !passport config
-dotenv.config("./config/passport")(passport);
+dotenv.config({ path: "./config/config.env" });
+require("./config/passport")(passport);
 
 // !Load config
 dotenv.config({ path: "./config/config.env" });
+
+//* Connect to database */
+connectDB();
 
 /* create an instance of express app */
 const app = express();
@@ -32,8 +36,10 @@ if (process.env.NODE_ENV === "development") {
 /* use process.env to access dotenv file */
 const PORT = process.env.PORT || 5000;
 
-//* Connect to database */
-connectDB();
+//* Handlebars docs: https://www.npmjs.com/package/express-handlebars
+/* The string name of the file extension used by the templates. This value should correspond with the extname under which this view engine is registered with Express when calling app.engine(). */
+app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
+app.set("view engine", ".hbs");
 
 //*express-sessions -- docs: https://www.npmjs.com/package/express-session
 //!make sure that sessions is always above passport
@@ -49,17 +55,13 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-//* Handlebars docs: https://www.npmjs.com/package/express-handlebars
-/* The string name of the file extension used by the templates. This value should correspond with the extname under which this view engine is registered with Express when calling app.engine(). */
-app.engine(".hbs", exphbs({ defaultLayout: "main", extname: ".hbs" }));
-app.set("view engine", ".hbs");
-
-//*Routes
-app.use("/", require("./routes/index"));
-
 //* Serve Static Files
 // public/ is where static files are served
 app.use(express.static(path.join(__dirname, "public")));
+
+//*Routes
+app.use("/", require("./routes/index"));
+app.use("/auth", require("./routes/auth"));
 
 /* Run the server */
 app.listen(
