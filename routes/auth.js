@@ -19,4 +19,11 @@ router.get(
   }
 );
 
+//todo: logout user
+//@route: GET /auth/logout
+router.get("/logout", (request, response) => {
+  request.logout();
+  response.redirect("/");
+});
+
 module.exports = router;
