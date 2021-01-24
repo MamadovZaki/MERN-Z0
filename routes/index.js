@@ -14,7 +14,9 @@ router.get("/", ensureGuest, (request, response) => {
 
 //todo: Dashboard -- @route: GET/
 router.get("/dashboard", ensureAuthentication, (request, response) => {
-  response.render("dashboard");
+  response.render("dashboard", {
+    name: request.user.firstName,
+  });
 });
 
 module.exports = router;
